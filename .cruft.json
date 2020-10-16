@@ -1,0 +1,21 @@
+{
+    "template": "https://github.com/Eisbrenner/wemake-python-package.git",
+    "commit": "bb8c7926355bcd126f198eba30fa0d51b2af5252",
+    "context": {
+        "cookiecutter": {
+            "project_name": "water-masses",
+            "organization": "shelf-sea",
+            "project_description": "On the origin of water masses in the northern European shelf seas from a Lagrangian perspective",
+            "license": "gpl3",
+            "_extensions": [
+                "jinja2_git.GitExtension"
+            ],
+            "_copy_without_render": [
+                ".venv",
+                "docs/_build"
+            ],
+            "_template": "https://github.com/Eisbrenner/wemake-python-package.git"
+        }
+    },
+    "directory": null
+}
