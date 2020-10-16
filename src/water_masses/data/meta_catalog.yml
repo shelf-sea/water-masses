@@ -1,0 +1,11 @@
+sources:
+  cmems:
+    args:
+      path: '{{ CATALOG_DIR }}cmems.yml'
+    description: ''
+    driver: intake.catalog.local.YAMLFileCatalog
+  copernicus:
+    args:
+      path: '{{ CATALOG_DIR }}copernicus-reanalysis.yml'
+    description: ''
+    driver: intake.catalog.local.YAMLFileCatalog
