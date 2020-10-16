@@ -1,0 +1,18 @@
+metadata:
+  version: 1
+
+plugins:
+  source:
+    - module: intake_xarray
+
+sources:
+  cmems:
+    driver: netcdf
+    description: CMEMS data as acquired by the script of Joakim
+    args:
+      urlpath: '{{ env(HOME) }}/data/TESTDATASET/CMEMS_altimetry_*.nc'
+    xarray_kwargs:
+      combine: by_coords
+      compat: override
+    metadata:
+      origin_url: 'http://my.cmems-du.eu/motu-web/Motu'
