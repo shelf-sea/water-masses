@@ -8,17 +8,9 @@ repos:
       - id: trailing-whitespace
         exclude: "LICENSE"
       - id: debug-statements
-
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.8.4
-    hooks:
-      - id: flake8
-        additional_dependencies: [flake8-bugbear]
-
-  - repo: https://github.com/psf/black
-    rev: 20.8b1
-    hooks:
-      - id: black
+      - id: check-added-large-files
+      - id: no-commit-to-branch
+        args: [--branch, master, --branch, stable]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.6.4
@@ -32,6 +24,17 @@ repos:
         name: isort (pyi)
         types: [pyi]
 
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-bugbear]
+
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.790
     hooks:
@@ -39,7 +42,7 @@ repos:
         exclude: "(^docs/conf.py)"
 
   - repo: https://github.com/aflc/pre-commit-jupyter
-    rev: v1.0.0
+    rev: v1.1.0
     hooks:
       - id: jupyter-notebook-cleanup
         args:

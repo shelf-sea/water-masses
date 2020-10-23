@@ -2,11 +2,11 @@ SHELL:=/usr/bin/env bash
 
 .PHONY: lint
 lint:
-	mypy -p water_masses
-	mypy tests/**/*.py
 	black --check .
 	flake8 .
 	doc8 -q docs
+	mypy -p water_masses
+	mypy tests/**/*.py
 
 .PHONY: unit
 unit:
