@@ -41,6 +41,7 @@ xarray = "^0.16.1"
 dask = "^2.30.0"
 intake = "^0.6.0"
 matplotlib = "^3.3.2"
+intake-xarray = "^0.4.0"
 
 
 [tool.poetry.dev-dependencies]
