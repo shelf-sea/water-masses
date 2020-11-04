@@ -39,4 +39,4 @@ print(some_function(3, 4))
 
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [8e880ddcef31a8af9388ab0797b3278cc0cc7f29](https://github.com/wemake-services/wemake-python-package/tree/8e880ddcef31a8af9388ab0797b3278cc0cc7f29). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/8e880ddcef31a8af9388ab0797b3278cc0cc7f29...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [17fe8fc0616832545808fefe9edb652c5c5beddf](https://github.com/wemake-services/wemake-python-package/tree/17fe8fc0616832545808fefe9edb652c5c5beddf). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/17fe8fc0616832545808fefe9edb652c5c5beddf...master) since then.
