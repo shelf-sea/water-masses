@@ -1,0 +1,37 @@
+metadata:
+  version: 1
+
+plugins:
+  source:
+    - module: intake_xarray
+
+sources:
+  daily_mean:
+    driver: netcdf
+    description: "CCI+ SSS 25km 7day averages."
+    args:
+      urlpath: "{{ env(HOME) }}/data/copernicus/SAL/dm/metoffice_foam1_amm7_NWS_SAL_dm*.nc"
+    xarray_kwargs:
+      combine: by_coords
+    metadata:
+      origin_url: ""
+
+  test_daily_mean:
+    driver: netcdf
+    description: "CCI+ SSS 25km 7day averages."
+    args:
+      urlpath: "{{ env(HOME) }}/data/copernicus/SAL/dm/metoffice_foam1_amm7_NWS_SAL_dm199[2-4]*.nc"
+    xarray_kwargs:
+      combine: by_coords
+    metadata:
+      origin_url: ""
+
+  monthly_mean:
+    driver: netcdf
+    description: "CCI+ SSS 25km 7day averages."
+    args:
+      urlpath: "{{ env(HOME) }}/data/copernicus/SAL/mm/metoffice_foam1_amm7_NWS_SAL_mm*.nc"
+    xarray_kwargs:
+      combine: by_coords
+    metadata:
+      origin_url: ""
