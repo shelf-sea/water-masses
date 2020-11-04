@@ -1,4 +1,4 @@
-# water-masses
+# WIP: water-masses
 
 [![Build Status](https://travis-ci.com/shelf-sea/water-masses.svg?branch=master)](https://travis-ci.com/shelf-sea/water-masses)
 [![Coverage](https://coveralls.io/repos/github/shelf-sea/water-masses/badge.svg?branch=master)](https://coveralls.io/github/shelf-sea/water-masses?branch=master)
@@ -17,7 +17,8 @@ On the origin of water masses in the northern European shelf seas from a Lagrang
 ## Installation
 
 ```bash
-pip install water-masses
+# pip install water-masses
+poetry add git+https://github.com/shelf-sea/water-masses.git#20.1a0
 ```
 
 
