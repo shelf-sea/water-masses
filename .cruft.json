@@ -1,6 +1,6 @@
 {
     "template": "https://github.com/Eisbrenner/wemake-python-package.git",
-    "commit": "8e880ddcef31a8af9388ab0797b3278cc0cc7f29",
+    "commit": "17fe8fc0616832545808fefe9edb652c5c5beddf",
     "context": {
         "cookiecutter": {
             "project_name": "water-masses",
