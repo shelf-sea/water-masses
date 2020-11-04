@@ -7,14 +7,16 @@ from typing import Optional
 import intake
 import pandas as pd
 import xarray as xr
+from functools import partial
 from cftime import DatetimeNoLeap
-from matplotlib import pyplot as plt
 from statsmodels import api as sm
 
 
 def open_sss(
-    catalog: str = "copernicus-reanalysis.yml", source: str = "daily_mean"
+    catalog: str = "copernicus-reanalysis.yml",
+    source: str = "daily_mean",
 ) -> xr.Dataset:
+    """Open dataset using Intake."""
     rename_dict = {"so": "salinity"}
     sal = (
         intake.open_catalog(str(Path(__file__).parent.joinpath("data", catalog)))[
@@ -28,11 +30,19 @@ def open_sss(
 
 
 def ref_series(
-    da: xr.DataArray, averaging_method="median", quantile: Optional[float] = None
+    da: xr.DataArray,
+    averaging_method="median",
+    quantile: Optional[float] = None,
+    longitude: Optional[slice] = None,
+    latitude: Optional[slice] = None,
 ) -> xr.DataArray:
     """Extract the reference time series."""
-    box = {"longitude": slice(-1, 2), "latitude": slice(57.5, 59.5)}
-    return getattr(da.sel(**box), averaging_method)(
+    if longitude is None:
+        longitude = slice(-1, 2)
+    if latitude is None:
+        latitude = slice(57.5, 59.5)
+
+    return getattr(da.sel(longitude=longitude, latitude=latitude), averaging_method)(
         quantile,
         dim=["longitude", "latitude"],
     )
@@ -50,6 +60,7 @@ class MetaData(object):
         quantile: Optional[float] = None,
         test: bool = True,
     ) -> None:
+        """Init."""
         self.lags = [30 * n for n in range(lag)]
         self.source = source
         self.averaging_method = averaging_method
@@ -60,19 +71,20 @@ class MetaData(object):
 
 def find_trend(da: xr.DataArray, meta_data):
     """Find trend."""
-    A = da.values
-    s = A.shape
-    y = getattr(
-        pd.DataFrame(A.reshape(s[0], -1)).dropna(axis=1), meta_data.averaging_method
+    data = da.values
+    shape = data.shape
+    result = getattr(
+        pd.DataFrame(data.reshape(shape[0], -1)).dropna(axis=1),
+        meta_data.averaging_method,
     )(meta_data.quantile, axis=1)
-    x = y.index
+    index = result.index
 
-    model = sm.OLS(y, sm.add_constant(x))
-    results = model.fit()
+    model = sm.OLS(result, sm.add_constant(index))
+    fit = model.fit()
 
-    trend = results.params.x1 * x + results.params.const
+    trend = fit.params.x1 * index + fit.params.const
 
-    return trend, model, results
+    return trend, model, fit
 
 
 class Climatology(object):
@@ -80,6 +92,7 @@ class Climatology(object):
 
     @staticmethod
     def domain_wide(dda_grouped: xr.DataArray, meta_data: MetaData) -> xr.DataArray:
+        """Calculate climatology for whole domain."""
         return getattr(dda_grouped, meta_data.averaging_method)(
             meta_data.quantile,
             dim=["longitude", "latitude"],
@@ -87,6 +100,7 @@ class Climatology(object):
 
     @staticmethod
     def point_wise(dda_grouped: xr.DataArray, meta_data: MetaData) -> xr.DataArray:
+        """Calculate climatology for each horizontal point."""
         return getattr(dda_grouped, meta_data.averaging_method)(
             meta_data.quantile,
         )
@@ -94,8 +108,10 @@ class Climatology(object):
 
 def rm_leap(data: xr.DataArray) -> xr.DataArray:
     """Remove lear days and replace time axis with cftime.DatetimeNoLeap."""
+    february = 2
+    leap_day = 29
     data = data.sel(
-        time=~((data.time.dt.month == 2) & (data.time.dt.day == 29)),
+        time=~((data.time.dt.month == february) & (data.time.dt.day == leap_day)),
     )
     data["time"] = [
         DatetimeNoLeap(*data.time[0].values.tolist().timetuple()) + timedelta(d)
@@ -105,44 +121,39 @@ def rm_leap(data: xr.DataArray) -> xr.DataArray:
     return data
 
 
-def main(test: bool = True) -> None:
+def main(
+    averaging_method: str = "quantile",
+    quantile: float = 0.9,
+    clim_method: str = "domain_wide",
+    test: bool = True,
+) -> None:
     """Load, detrend and declimatize SSS data."""
-    AVERAGING_METHOD = "quantile"
-    QUANTILE = 0.9
-    CLIM_METHOD = "domain_wide"
-    output_path = Path.home().joinpath("data", "output", "water-masses")
-    output_path.mkdir(parents=True, exist_ok=True)
-
     if test:
-        meta_data = MetaData(
-            3,
-            "test_daily_mean",
-            clim_method=CLIM_METHOD,
-            averaging_method=AVERAGING_METHOD,
-            test=test,
-            quantile=QUANTILE,
-        )
+        output_path = Path.home().joinpath("data", "output", "water-masses", "test")
+        meta_data_partial = partial(MetaData, 3, "test_daily_mean")
     else:
-        meta_data = MetaData(
-            24,
-            "daily_mean",
-            clim_method=CLIM_METHOD,
-            averaging_method=AVERAGING_METHOD,
-            test=test,
-            quantile=QUANTILE,
-        )
+        output_path = Path.home().joinpath("data", "output", "water-masses")
+        meta_data_partial = partial(MetaData, 24, "daily_mean")
+    output_path.mkdir(parents=True, exist_ok=True)
+    meta_data = meta_data_partial(
+        clim_method=clim_method,
+        averaging_method=averaging_method,
+        test=test,
+        quantile=quantile,
+    )
 
-    data = open_sss(source=meta_data.source)
-    data = rm_leap(data.salinity)
+    # FIXME: missing type in to_array
+    data = open_sss(source=meta_data.source).to_array(dim="salinity")  # type: ignore
+    data = rm_leap(data)
     data -= xr.DataArray(find_trend(data, meta_data)[0], [("time", data.time.values)])
     data -= getattr(Climatology, meta_data.clim_method)(
-        data.groupby("time.dayofyear"), meta_data
+        data.groupby("time.dayofyear"),
+        meta_data,
     )
 
     refser = ref_series(data, meta_data.averaging_method, quantile=meta_data.quantile)
 
     data = data.to_dataset(name="SSS")
-
     data.to_netcdf(output_path.joinpath("sss-processed.nc"))
     refser.to_netcdf(output_path.joinpath("sss_time_series_processed.nc"))
 
