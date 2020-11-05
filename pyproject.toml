@@ -9,7 +9,7 @@ style = "https://raw.githubusercontent.com/Eisbrenner/wemake-python-package/mast
 
 [tool.poetry]
 name = "water-masses"
-version = "20.1"
+version = "20.1a1"
 description = "On the origin of water masses in the northern European shelf seas from a Lagrangian perspective"
 license = "GPL3"
 
