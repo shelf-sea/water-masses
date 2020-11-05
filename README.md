@@ -1,4 +1,4 @@
-# water-masses
+# WIP: water-masses
 
 [![Build Status](https://travis-ci.com/shelf-sea/water-masses.svg?branch=master)](https://travis-ci.com/shelf-sea/water-masses)
 [![Coverage](https://coveralls.io/repos/github/shelf-sea/water-masses/badge.svg?branch=master)](https://coveralls.io/github/shelf-sea/water-masses?branch=master)
@@ -17,7 +17,8 @@ On the origin of water masses in the northern European shelf seas from a Lagrang
 ## Installation
 
 ```bash
-pip install water-masses
+# pip install water-masses
+poetry add git+https://github.com/shelf-sea/water-masses.git#20.1a0
 ```
 
 
@@ -39,4 +40,4 @@ print(some_function(3, 4))
 
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [8e880ddcef31a8af9388ab0797b3278cc0cc7f29](https://github.com/wemake-services/wemake-python-package/tree/8e880ddcef31a8af9388ab0797b3278cc0cc7f29). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/8e880ddcef31a8af9388ab0797b3278cc0cc7f29...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [17fe8fc0616832545808fefe9edb652c5c5beddf](https://github.com/wemake-services/wemake-python-package/tree/17fe8fc0616832545808fefe9edb652c5c5beddf). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/17fe8fc0616832545808fefe9edb652c5c5beddf...master) since then.
