@@ -130,20 +130,26 @@ def main(
     """Load, detrend and declimatize SSS data."""
     if test:
         output_path = Path.home().joinpath("data", "output", "water-masses", "test")
-        meta_data_partial = partial(MetaData, 3, "test_daily_mean")
+        meta_data_partial = partial(MetaData, 3)
     else:
         output_path = Path.home().joinpath("data", "output", "water-masses")
-        meta_data_partial = partial(MetaData, 24, "daily_mean")
+        meta_data_partial = partial(MetaData, 24)
     output_path.mkdir(parents=True, exist_ok=True)
     meta_data = meta_data_partial(
+        "daily_mean",
         clim_method=clim_method,
         averaging_method=averaging_method,
         test=test,
         quantile=quantile,
     )
 
-    # FIXME: missing type in to_array
-    data = open_sss(source=meta_data.source).to_array(dim="salinity")  # type: ignore
+    # FIXME: xarray type annotation slug missing
+    data = open_sss(source=meta_data.source)["salinity"]  # type: ignore
+    if test:
+        data = data.loc["1996-01-01":"1997-12-31"].isel(
+            longitude=slice(None, None, 10),
+            latitude=slice(None, None, 10),
+        )
     data = rm_leap(data)
     data -= xr.DataArray(find_trend(data, meta_data)[0], [("time", data.time.values)])
     data -= getattr(Climatology, meta_data.clim_method)(
