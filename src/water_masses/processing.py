@@ -146,7 +146,7 @@ def main(
     # FIXME: xarray type annotation slug missing
     data = open_sss(source=meta_data.source)["salinity"]
     if test:
-        data = data.loc["1996-01-01":"1997-12-31"].isel(  # type: ignore
+        data = data.sel(time=slice("1996-01-01", "1997-12-31")).isel(  # type: ignore
             longitude=slice(None, None, 10),
             latitude=slice(None, None, 10),
         )
