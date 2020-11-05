@@ -144,9 +144,9 @@ def main(
     )
 
     # FIXME: xarray type annotation slug missing
-    data = open_sss(source=meta_data.source)["salinity"]  # type: ignore
+    data = open_sss(source=meta_data.source)["salinity"]
     if test:
-        data = data.loc["1996-01-01":"1997-12-31"].isel(
+        data = data.loc["1996-01-01":"1997-12-31"].isel(  # type: ignore
             longitude=slice(None, None, 10),
             latitude=slice(None, None, 10),
         )
@@ -159,7 +159,7 @@ def main(
 
     refser = ref_series(data, meta_data.averaging_method, quantile=meta_data.quantile)
 
-    data = data.to_dataset(name="SSS")
+    data = data.to_dataset(name="SSS")  # type: ignore
     data.to_netcdf(output_path.joinpath("sss-processed.nc"))
     refser.to_netcdf(output_path.joinpath("sss_time_series_processed.nc"))
 
