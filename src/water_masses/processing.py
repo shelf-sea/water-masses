@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from datetime import timedelta
+from functools import partial
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 import intake
 import pandas as pd
 import xarray as xr
-from functools import partial
 from cftime import DatetimeNoLeap
 from statsmodels import api as sm
 
@@ -31,7 +31,7 @@ def open_sss(
 
 def ref_series(
     da: xr.DataArray,
-    averaging_method="median",
+    averaging_method: str = "median",
     quantile: Optional[float] = None,
     longitude: Optional[slice] = None,
     latitude: Optional[slice] = None,
@@ -69,7 +69,14 @@ class MetaData(object):
         self.quantile = quantile
 
 
-def find_trend(da: xr.DataArray, meta_data):
+def find_trend(
+    da: xr.DataArray,
+    meta_data: MetaData,
+) -> Tuple[
+    pd.core.indexes.numeric.Float64Index,
+    sm.regression.linear_model.OLS,
+    sm.regression.linear_model.RegressionResultsWrapper,
+]:
     """Find trend."""
     data = da.values
     shape = data.shape
