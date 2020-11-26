@@ -7,13 +7,10 @@
   // ***python***
   // general
   "python.pythonPath": ".venv/bin/python",
-  "python.dataScience.sendSelectionToInteractiveWindow": true,
   "python.languageServer": "Pylance",
   "python.analysis.typeCheckingMode": "basic",
   "[python]": {
-    "editor.rulers": [
-      88
-    ]
+    "editor.rulers": [88]
   },
 
   // linting
@@ -31,7 +28,8 @@
   "python.testing.unittestEnabled": false,
   "python.testing.nosetestsEnabled": false,
   "python.testing.pytestPath": ".venv/bin/pytest",
-  "python.testing.pytestArgs": [
-    "tests"
-  ],
+  "python.testing.pytestArgs": ["tests"],
+
+  // jupyter
+  "jupyter.sendSelectionToInteractiveWindow": true,
 }
