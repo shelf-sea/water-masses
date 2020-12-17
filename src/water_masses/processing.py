@@ -7,7 +7,6 @@ from typing import Optional
 import intake
 import pandas as pd
 import xarray as xr
-from functools import partial
 from cftime import DatetimeNoLeap
 from statsmodels import api as sm
 
@@ -53,7 +52,6 @@ class MetaData(object):
 
     def __init__(
         self,
-        lag: int,
         source: str,
         clim_method: str = "domain_wide",
         averaging_method: str = "mean",
@@ -61,7 +59,6 @@ class MetaData(object):
         test: bool = True,
     ) -> None:
         """Init."""
-        self.lags = [30 * n for n in range(lag)]
         self.source = source
         self.averaging_method = averaging_method
         self.test = test
@@ -121,6 +118,16 @@ def rm_leap(data: xr.DataArray) -> xr.DataArray:
     return data
 
 
+def output_directory(test: bool = True) -> Path:
+    """Provide path to output directory."""
+    if test:
+        op = Path.home().joinpath("data", "output", "water-masses", "test")
+    else:
+        op = Path.home().joinpath("data", "output", "water-masses")
+
+    return op
+
+
 def main(
     averaging_method: str = "quantile",
     quantile: float = 0.9,
@@ -128,14 +135,9 @@ def main(
     test: bool = True,
 ) -> None:
     """Load, detrend and declimatize SSS data."""
-    if test:
-        output_path = Path.home().joinpath("data", "output", "water-masses", "test")
-        meta_data_partial = partial(MetaData, 3)
-    else:
-        output_path = Path.home().joinpath("data", "output", "water-masses")
-        meta_data_partial = partial(MetaData, 24)
+    output_path = output_directory(test=test)
     output_path.mkdir(parents=True, exist_ok=True)
-    meta_data = meta_data_partial(
+    meta_data = MetaData(
         "daily_mean",
         clim_method=clim_method,
         averaging_method=averaging_method,
@@ -143,7 +145,6 @@ def main(
         quantile=quantile,
     )
 
-    # FIXME: xarray type annotation slug missing
     data = open_sss(source=meta_data.source)["salinity"]
     if test:
         data = data.sel(time=slice("1996-01-01", "1997-12-31")).isel(
@@ -159,10 +160,11 @@ def main(
 
     refser = ref_series(data, meta_data.averaging_method, quantile=meta_data.quantile)
 
+    # FIXME: xarray type annotation slug missing
     data = data.to_dataset(name="SSS")  # type: ignore
     data.to_netcdf(output_path.joinpath("sss-processed.nc"))
     refser.to_netcdf(output_path.joinpath("sss_time_series_processed.nc"))
 
 
 if __name__ == "__main__":
-    main(test=True)
+    main()
