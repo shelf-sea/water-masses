@@ -197,10 +197,11 @@ def main(
     test: bool = True,
 ) -> None:
     """Load, detrend and declimatize SSS data."""
+    source = "daily_mean" if not test else "test_daily_mean"
     output_path = output_directory(test=test)
     output_path.mkdir(parents=True, exist_ok=True)
     meta_data = MetaData(
-        "daily_mean",
+        source,
         clim_method=clim_method,
         averaging_method=averaging_method,
         test=test,
@@ -209,7 +210,7 @@ def main(
 
     data = open_sss(source=meta_data.source)["salinity"]
     if test:
-        data = data.sel(time=slice("1992-10-01", "1993-03-31")).isel(
+        data = data.isel(
             longitude=slice(None, None, 10),
             latitude=slice(None, None, 10),
         )
