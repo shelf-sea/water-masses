@@ -78,9 +78,8 @@ class RemoveTrend(object):
         self.quantile = meta_data.quantile
 
     @staticmethod
-    def _domain_wide(data: xr.DataArray, averaging_method: str, quantile: float):
+    def _domain_wide(data: np.ndarray, averaging_method: str, quantile: float):
         """Find trend."""
-        data = data.values
         shape = data.shape
 
         data = getattr(
@@ -97,7 +96,7 @@ class RemoveTrend(object):
     def domain_wide(self):
         """Remove global trend from data."""
         return self.data - xr.DataArray(
-            self._domain_wide(self.data, self.averaging_method, self.quantile),
+            self._domain_wide(self.data.values, self.averaging_method, self.quantile),
             [("time", self.data.time.values)],
         )
 
@@ -225,8 +224,7 @@ def main(
 
     refser = ref_series(data, meta_data.averaging_method, quantile=meta_data.quantile)
 
-    data = data.to_dataset(name="SSS")
-    data.to_netcdf(output_path.joinpath("sss-processed.nc"))
+    data.to_dataset(name="SSS").to_netcdf(output_path.joinpath("sss-processed.nc"))
     refser.to_netcdf(output_path.joinpath("sss_time_series_processed.nc"))
 
 
