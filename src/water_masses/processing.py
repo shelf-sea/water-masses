@@ -72,6 +72,7 @@ class RemoveTrend(object):
     """Container class for trend removal functions."""
 
     def __init__(self, data, meta_data) -> None:
+        """Initialize RemoveTrend."""
         self.data = data
         self.averaging_method = meta_data.averaging_method
         self.quantile = meta_data.quantile
