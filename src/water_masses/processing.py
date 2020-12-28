@@ -30,25 +30,6 @@ def open_sss(
     return sal.sel(depth=0)
 
 
-def ref_series(
-    da: xr.DataArray,
-    averaging_method="median",
-    quantile: Optional[float] = None,
-    longitude: Optional[slice] = None,
-    latitude: Optional[slice] = None,
-) -> xr.DataArray:
-    """Extract the reference time series."""
-    if longitude is None:
-        longitude = slice(-1, 2)
-    if latitude is None:
-        latitude = slice(57.5, 59.5)
-
-    return getattr(da.sel(longitude=longitude, latitude=latitude), averaging_method)(
-        quantile,
-        dim=["longitude", "latitude"],
-    )
-
-
 class MetaData(object):
     """Some values required here and there."""
 
@@ -66,6 +47,25 @@ class MetaData(object):
         self.test = test
         self.clim_method = clim_method
         self.quantile = quantile
+
+
+def ref_series(
+    da: xr.DataArray,
+    md: MetaData,
+    longitude: Optional[slice] = None,
+    latitude: Optional[slice] = None,
+) -> xr.DataArray:
+    """Extract the reference time series."""
+    if longitude is None:
+        longitude = slice(-1, 2)
+    if latitude is None:
+        latitude = slice(57.5, 59.5)
+
+    return Climatology._climatology(
+        da.sel(longitude=longitude, latitude=latitude),
+        md,
+        dim=["longitude", "latitude"],
+    )
 
 
 class RemoveTrend(object):
@@ -222,7 +222,7 @@ def main(
         meta_data,
     )
 
-    refser = ref_series(data, meta_data.averaging_method, quantile=meta_data.quantile)
+    refser = ref_series(data, meta_data)
 
     data.to_dataset(name="SSS").to_netcdf(output_path.joinpath("sss-processed.nc"))
     refser.to_netcdf(output_path.joinpath("sss_time_series_processed.nc"))
