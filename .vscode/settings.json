@@ -32,4 +32,10 @@
 
   // jupyter
   "jupyter.sendSelectionToInteractiveWindow": true,
+
+  // cspell
+  "cSpell.diagnosticLevel": "Hint",
+  "workbench.colorCustomizations": {
+    "editorHint.foreground": "#00ff66",
+  },
 }

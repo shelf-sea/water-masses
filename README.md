@@ -40,4 +40,4 @@ print(some_function(3, 4))
 
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [9e6e683170a22ca6b5cc3a7a2265450cd308b170](https://github.com/wemake-services/wemake-python-package/tree/9e6e683170a22ca6b5cc3a7a2265450cd308b170). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/9e6e683170a22ca6b5cc3a7a2265450cd308b170...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [5a686829afd7b6f54cb2170ed3072eee8e296ec0](https://github.com/wemake-services/wemake-python-package/tree/5a686829afd7b6f54cb2170ed3072eee8e296ec0). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/5a686829afd7b6f54cb2170ed3072eee8e296ec0...master) since then.
