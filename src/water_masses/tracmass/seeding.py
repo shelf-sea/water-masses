@@ -88,7 +88,7 @@ def seed_patch(
                 )
 
 
-def main():
+def main() -> None:
     """Run module as script."""
     seed_patch(708, 5, 595, 5, max_as_diff=True)
 
