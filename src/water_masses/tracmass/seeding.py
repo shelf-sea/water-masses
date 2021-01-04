@@ -61,25 +61,31 @@ def seed_patch(
     seedfile = f"start_{experiment_name}.txt"
     if file_target_dir is not None:
         seedfile = str(Path(file_target_dir).joinpath(seedfile))
+    else:
+        seedfile = str(Path.home().joinpath("data", seedfile))
     with open(seedfile, "w") as file:
-        for grid_loc in [[1, 2] if grid_location == 0 else [grid_location]][0]:
+        ist_jst = [
+            (ist, jst)
             for ist in range(
                 lon_ind_min,
                 lon_ind_min + lon_ind_max + 1 if max_as_diff else lon_ind_max + 1,
-            ):
-                for jst in range(
-                    lat_ind_min,
-                    lat_ind_min + lat_ind_max + 1 if max_as_diff else lat_ind_max + 1,
-                ):
-                    file.write(
-                        "{0: 10d}{1: 10d}{2: 10d}{3: 6d}{4: 12d}\n".format(
-                            ist,
-                            jst,
-                            vertical_ind,
-                            grid_loc,
-                            directional_filter,
-                        )
-                    )
+            )
+            for jst in range(
+                lat_ind_min,
+                lat_ind_min + lat_ind_max + 1 if max_as_diff else lat_ind_max + 1,
+            )
+        ]
+        for grid_loc in [[1, 2] if grid_location == 0 else [grid_location]][0]:
+            for ist, jst in ist_jst:
+                file.write(
+                    "{0: 10d}{1: 10d}{2: 10d}{3: 6d}{4: 12d}\n".format(
+                        ist,
+                        jst,
+                        vertical_ind,
+                        grid_loc,
+                        directional_filter,
+                    ),
+                )
 
 
 def main():
