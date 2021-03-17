@@ -17,8 +17,9 @@ On the origin of water masses in the northern European shelf seas from a Lagrang
 ## Installation
 
 ```bash
-# pip install water-masses
-poetry add git+https://github.com/shelf-sea/water-masses.git#20.1a2
+pip install water-masses
+# or
+poetry add git+https://github.com/shelf-sea/water-masses.git#master
 ```
 
 

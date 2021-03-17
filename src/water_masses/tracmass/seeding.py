@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 """Create seeding file for Tracmass."""
-from typing import Optional
 from pathlib import Path
+from typing import Optional, Union, List, Tuple, Dict
+import io
+from operator import itemgetter
+
+import cf_xarray as cfxr
+import numpy as np
+import xarray as xr
 
 
 def seed_patch(
@@ -77,15 +83,122 @@ def seed_patch(
         ]
         for grid_loc in [[1, 2] if grid_location == 0 else [grid_location]][0]:
             for ist, jst in ist_jst:
-                file.write(
-                    "{0: 10d}{1: 10d}{2: 10d}{3: 6d}{4: 12d}\n".format(
-                        ist,
-                        jst,
-                        vertical_ind,
-                        grid_loc,
-                        directional_filter,
-                    ),
+                write_seed(file, ist, jst, vertical_ind, grid_loc, directional_filter)
+
+
+def write_seed(
+    file: io.TextIOWrapper,
+    i: int,
+    j: int,
+    k: int = 1,
+    gridloc: int = 1,
+    dirfilt: int = 0,
+) -> None:
+    """Write single seed location to seed file."""
+    file.write(
+        "{0: 10d}{1: 10d}{2: 10d}{3: 6d}{4: 12d}\n".format(
+            i,
+            j,
+            k,
+            gridloc,
+            dirfilt,
+        ),
+    )
+
+
+def seed_horizontal_diagonal(
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+    da: xr.DataArray,
+    flow_direction: Dict[str, int],
+    nyq: int = 3,
+    experiment_name: Optional[str] = "diagonal",
+    file_target_dir: Optional[Path] = None,
+) -> List[Tuple[int]]:
+    """Create a seed file for a horizontal diagonal seeding line."""
+    num = int(
+        np.max(
+            [
+                (end - start) / delta * nyq
+                for start, end, delta in zip(
+                    [x0, y0],
+                    [x1, y1],
+                    [np.mean(np.diff(da.cf[dim])) for dim in ["longitude", "latitude"]],
                 )
+            ],
+        ),
+    )
+    xi, yi = [
+        np.linspace(start=start, stop=end, num=num)
+        for start, end in zip([x0, y0], [x1, y1])
+    ]
+    coords = [
+        (
+            float(da.cf[coord].cf.sel(**{coord: value, "method": "nearest"}).values)
+            for coord, value in zip(["longitude", "latitude"], [lon, lat])
+        )
+        for lon, lat in zip(xi, yi)
+    ]
+    coords = set(coords)
+    coords = [
+        (
+            index(da, "longitude", x),
+            index(da, "latitude", y),
+        )
+        for x, y in coords
+    ]
+    coords.sort(key=itemgetter(0, 1))
+    coords.extend(
+        [
+            (
+                coords[i][0],
+                coords[i + 1][1],
+            )
+            for i in range(len(coords[:-1]))
+            if coords[i][0] != coords[i + 1][0] and coords[i][1] != coords[i + 1][1]
+        ],
+    )
+    coords.sort(key=itemgetter(0, 1))
+    if file_target_dir is not None:
+        seedfile = f"seed_{experiment_name}.txt"
+        seedfile = str(file_target_dir.joinpath(seedfile))
+        with open(seedfile, "w") as file:
+            for i in range(len(coords[:-1])):
+                gridloc, dirfilt = (
+                    [1, flow_direction["zonal"]]
+                    if coords[i][0] != coords[i + 1][0]
+                    else [2, flow_direction["meridional"]]
+                )
+                write_seed(
+                    file,
+                    coords[i][0],
+                    coords[i][1],
+                    gridloc=gridloc,
+                    dirfilt=dirfilt,
+                )
+
+    return coords
+
+
+def index(ds: Union[xr.DataArray, xr.Dataset], dim: str, loc: float) -> int:
+    """Look up nearest index given a location."""
+    islocarr = ds[dim] != ds.sel(**{dim: loc}, method="nearest")[dim]
+    notloc = True
+    i = 0
+    while notloc:
+        notloc = islocarr[i]
+        i += 1
+    return i - 1
+
+
+def convert(da: xr.DataArray, idx: float) -> float:
+    """Convert index to coordinate."""
+    mi = da.min().values
+    ma = da.max().values
+    le = len(da)
+    return idx / (le - 1) * (ma - mi) + mi
 
 
 def main() -> None:
