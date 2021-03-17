@@ -11,11 +11,15 @@ from typing import Optional
 
 import pandas as pd
 
+from .constants import Timespan
+
 
 class MetaData(object):
     """Define general meta data."""
 
-    def __init__(self, data_path: Optional[str] = None) -> None:
+    def __init__(
+        self, data_path: Optional[str] = None, timespan: Optional[Timespan] = None
+    ) -> None:
         """Init."""
         self.data_path = (
             data_path
@@ -29,14 +33,15 @@ class MetaData(object):
                 )
             )
         )
+        self.timespan = timespan if timespan is not None else Timespan()
 
     import_kwargs = {
         "header": None,
         "usecols": [0, 1, 5],
-        "names": ["particle id", "lon", "time"],
+        "names": ["id", "lon", "time"],
         "skipinitialspace": True,
     }
-    indices = ["particle id"]
+    indices = ["id"]
 
 
 def open_dataset(data_name: str, meta_data) -> pd.DataFrame:
@@ -46,7 +51,8 @@ def open_dataset(data_name: str, meta_data) -> pd.DataFrame:
         **meta_data.import_kwargs,
     ).set_index(meta_data.indices)
     df = df.assign(
-        date=pd.Timestamp("2019-10-31T12") + pd.to_timedelta(df.time.values, "s"),
+        date=pd.Timestamp(meta_data.timespan.end)
+        + pd.to_timedelta(df.time.values, "s"),
     )
     df.set_index([df.index, "date"], inplace=True)
     return df
