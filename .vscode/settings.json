@@ -36,6 +36,6 @@
   // cspell
   "cSpell.diagnosticLevel": "Hint",
   "workbench.colorCustomizations": {
-    "editorHint.foreground": "#00ff66",
+    "editorHint.foreground": "#00ff66"
   },
 }
