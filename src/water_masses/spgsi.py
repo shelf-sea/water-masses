@@ -36,7 +36,7 @@ def assign2trj(df: pd.DataFrame, spgs_idx: pd.DataFrame) -> pd.DataFrame:
     return df.assign(PC2=vspgsi(df.init))
 
 
-def open(path: Path) -> pd.DataFrame:
+def open_index(path: Path) -> pd.DataFrame:
     """Read SPG strength index."""
     spgsi = pd.read_csv(path, header=None, names=["PC1", "PC2"])
     dates = pd.date_range(
