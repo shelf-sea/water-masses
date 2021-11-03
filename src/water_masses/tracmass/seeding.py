@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional, Union, List, Tuple, Dict
 import io
 
-import cf_xarray as cfxr
+import cf_xarray as cfxr  # noqa
 import numpy as np
 import xarray as xr
 

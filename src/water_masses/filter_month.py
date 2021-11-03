@@ -30,7 +30,7 @@ class MetaData(object):
                     "interim",
                     "tracmass_out",
                     "tests_{0}.csv",
-                )
+                ),
             )
         )
         self.timespan = timespan if timespan is not None else Timespan()

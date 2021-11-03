@@ -15,10 +15,10 @@ from datetime import datetime
                 "start": datetime.strptime("1993-01-01T00:00:00", "%Y-%m-%dT%H:%M:%S"),
                 "end": datetime.strptime("2003-01-11T00:01:00", "%Y-%m-%dT%H:%M:%S"),
             },
-        )
+        ),
     ],
 )
-def test_Timespan(start, end, expected):
+def test_timespan(start, end, expected):
     """Example test with parametrization."""
     assert Timespan(start, end).start == expected["start"]
     assert Timespan(start, end).end == expected["end"]
