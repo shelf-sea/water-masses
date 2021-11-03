@@ -73,7 +73,7 @@ def select_from_initialization(
         meta_data = MetaData()
     df = open_dataset("ini", meta_data)
     of_month = df.index.get_level_values("date").month_name() == month
-    return df[of_month].sample(sample_size).index.get_level_values("particle id")
+    return df[of_month].sample(sample_size).index.get_level_values("id")
 
 
 def main() -> pd.Int64Index:
