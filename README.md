@@ -20,4 +20,4 @@ poetry add git+https://github.com/shelf-sea/water-masses.git#master
 
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [8f1dc9551bfc3da266d5fd5acf4cfc2c9289cac5](https://github.com/wemake-services/wemake-python-package/tree/8f1dc9551bfc3da266d5fd5acf4cfc2c9289cac5). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/8f1dc9551bfc3da266d5fd5acf4cfc2c9289cac5...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [98c82c2c9f7f66fd8a5009361e4272240c25dc6f](https://github.com/wemake-services/wemake-python-package/tree/98c82c2c9f7f66fd8a5009361e4272240c25dc6f). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/98c82c2c9f7f66fd8a5009361e4272240c25dc6f...master) since then.
