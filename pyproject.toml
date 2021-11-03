@@ -1,6 +1,6 @@
 [build-system]
-requires = ["poetry>=1.0"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 
 [tool.nitpick]
@@ -9,7 +9,7 @@ style = "https://raw.githubusercontent.com/Eisbrenner/wemake-python-package/mast
 
 [tool.poetry]
 name = "water-masses"
-version = "2021.1.0-alpha.3"
+version = "2021.2.0"
 description = "On the origin of water masses in the northern European shelf seas from a Lagrangian perspective"
 license = "GPL3"
 
@@ -57,33 +57,35 @@ pre-commit = "^2.6.0"
 mypy = "0.910"
 black = "21.10b0"
 isort = "5.10.0"
-flake8 = "4.0.1"
+flake8 = "3.9.2"
 
 # checks, formatting and linting
-# needs release > 0.14.1 of wemake-python-styleguide because of flake8-isort's support of isort >= 4.0
-# wemake-python-styleguide = "^0.14.2"
-wemake-python-styleguide = { git = "https://github.com/wemake-services/wemake-python-styleguide.git", rev = "dffa5cb" }
-flake8-pytest-style = "^1.3"
-flake8-isort = "^4.0"
-nitpick = "^0.22"
+wemake-python-styleguide = "^0.15"
+flake8-pytest-style = "^1.5"
+flake8-isort = "^4.1"
+nitpick = "^0.28"
 
-safety = "^1.9"
+safety = "^1.10"
 
 # testing
-pytest = "^5.4"
-pytest-cov = "^2.10"
-pytest-randomly = "^3.4"
-pytest-sugar = "^0.9.3"
+pytest = "^6.2"
+pytest-cov = "^3.0"
+pytest-randomly = "^3.8"
+pytest-sugar = "^0.9"
 
 # docs
-sphinx = "^2.2"
-sphinx-autodoc-typehints = "^1.10"
-doc8 = "^0.8"
-m2r = "^0.2"
+sphinx = "^4.1"
+sphinx-autodoc-typehints = "^1.12"
+doc8 = "^0.9"
+m2r = "^0.3"
 tomlkit = "^0.7"
 
-# convinience
-bpython = "^0.19"
+# template updates
+cookiecutter = "^1.7"
+jinja2_git = "^1.1"
+lice = "^0.6"
+cruft = "^2.9"
+toml = "^0.10"
 
 
 [tool.black]
@@ -105,3 +107,7 @@ exclude = '''
   | \.ipynb_checkpoints
 )/
 '''
+
+
+[tool.cruft]
+skip = ["src/water_masses/__init__.py", "tests"]
