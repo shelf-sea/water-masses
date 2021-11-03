@@ -3,7 +3,6 @@
 from pathlib import Path
 from typing import Optional, Union, List, Tuple, Dict
 import io
-from operator import itemgetter
 
 import cf_xarray as cfxr
 import numpy as np
@@ -116,8 +115,65 @@ def seed_horizontal_diagonal(
     nyq: int = 3,
     experiment_name: Optional[str] = "diagonal",
     file_target_dir: Optional[Path] = None,
-) -> List[Tuple[int]]:
+) -> List[Tuple[int, int]]:
     """Create a seed file for a horizontal diagonal seeding line."""
+    if x1 < x0:
+        raise ValueError("x1 needs to be equal to, or east of x0.")
+    xi, yi = _interpolate_on_step_function(x0, y0, x1, y1, da, nyq)
+    coords = _step_function_gridbox_coords(xi, yi, da)
+    if file_target_dir is not None:
+        seedfile = f"seed_{experiment_name}.txt"
+        seedfile = str(file_target_dir.joinpath(seedfile))
+        prev = []
+        with open(seedfile, "w") as file:
+            for i in range(len(coords)):
+                if not prev:
+                    y = coords[i][1]
+                    isec = 2
+                else:
+                    y, isec = seedloc_at(coords[i][1], coords[i - 1][1])
+                curr = {
+                    "i": coords[i][0],
+                    "j": y,
+                    "k": 1,
+                    "gridloc": isec,
+                    "dirfilt": flow_direction["zonal"]
+                    if isec == 1
+                    else flow_direction["meridional"],
+                }
+                if curr == prev:
+                    continue
+                write_seed(file, **curr)
+                prev = curr
+
+    return coords
+
+
+def seedloc_at(y: int, prev_y: int) -> Tuple[int, int]:
+    """Identity box border to place seeds on.
+
+    Special case for y < y-1 with x = x-1.
+    The seeds need to be placed in the previous box.
+    """
+    east = 1
+    north = 2
+    isec = north if _horizontal(y, prev_y) else east
+    y = prev_y if y < prev_y else y
+    return y, isec
+
+
+def _horizontal(y1: int, y2: int) -> bool:
+    return y1 == y2
+
+
+def _interpolate_on_step_function(
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+    da: xr.DataArray,
+    nyq: int,
+) -> Tuple[np.ndarray, np.ndarray]:
     num = int(
         np.max(
             [
@@ -134,6 +190,15 @@ def seed_horizontal_diagonal(
         np.linspace(start=start, stop=end, num=num)
         for start, end in zip([x0, y0], [x1, y1])
     ]
+    return xi, yi
+
+
+def _step_function_gridbox_coords(
+    xi: np.ndarray,
+    yi: np.ndarray,
+    da: xr.DataArray,
+) -> List[Tuple[int, int]]:
+    """Calculate unique coordinates of gridboxed of the seeding step-function."""
     coords = [
         (
             float(da.cf[coord].cf.sel(**{coord: value, "method": "nearest"}).values)
@@ -141,7 +206,6 @@ def seed_horizontal_diagonal(
         )
         for lon, lat in zip(xi, yi)
     ]
-    coords = set(coords)
     coords = [
         (
             index(da, "longitude", x),
@@ -149,7 +213,10 @@ def seed_horizontal_diagonal(
         )
         for x, y in coords
     ]
-    coords.sort(key=itemgetter(0, 1))
+    coords = sorted(
+        set(coords),
+        key=lambda x: (x[0], x[1] * 1 if yi[-1] >= yi[0] else -1),
+    )
     coords.extend(
         [
             (
@@ -160,26 +227,10 @@ def seed_horizontal_diagonal(
             if coords[i][0] != coords[i + 1][0] and coords[i][1] != coords[i + 1][1]
         ],
     )
-    coords.sort(key=itemgetter(0, 1))
-    if file_target_dir is not None:
-        seedfile = f"seed_{experiment_name}.txt"
-        seedfile = str(file_target_dir.joinpath(seedfile))
-        with open(seedfile, "w") as file:
-            for i in range(len(coords[:-1])):
-                gridloc, dirfilt = (
-                    [1, flow_direction["zonal"]]
-                    if coords[i][0] != coords[i + 1][0]
-                    else [2, flow_direction["meridional"]]
-                )
-                write_seed(
-                    file,
-                    coords[i][0],
-                    coords[i][1],
-                    gridloc=gridloc,
-                    dirfilt=dirfilt,
-                )
-
-    return coords
+    return sorted(
+        set(coords),
+        key=lambda x: (x[0], x[1] * 1 if yi[-1] >= yi[0] else -1),
+    )
 
 
 def index(ds: Union[xr.DataArray, xr.Dataset], dim: str, loc: float) -> int:
@@ -193,7 +244,10 @@ def index(ds: Union[xr.DataArray, xr.Dataset], dim: str, loc: float) -> int:
     return i - 1
 
 
-def convert(da: xr.DataArray, idx: float) -> float:
+def convert(
+    da: xr.DataArray,
+    idx: Union[float, np.ndarray],
+) -> Union[float, np.ndarray]:
     """Convert index to coordinate."""
     mi = da.min().values
     ma = da.max().values
