@@ -1,43 +1,23 @@
-# WIP: water-masses
-
-[![Build Status](https://travis-ci.com/shelf-sea/water-masses.svg?branch=master)](https://travis-ci.com/shelf-sea/water-masses)
-[![Coverage](https://coveralls.io/repos/github/shelf-sea/water-masses/badge.svg?branch=master)](https://coveralls.io/github/shelf-sea/water-masses?branch=master)
+# Water-Masses
+[![Build Status](https://github.com/shelf-sea/water-masses/workflows/test/badge.svg?branch=master&event=push)](https://github.com/shelf-sea/water-masses/actions?query=workflow%3Atest)
+[![codecov](https://codecov.io/gh/shelf-sea/water-masses/branch/master/graph/badge.svg)](https://codecov.io/gh/shelf-sea/water-masses)
 [![Python Version](https://img.shields.io/pypi/pyversions/water-masses.svg)](https://pypi.org/project/water-masses/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
-On the origin of water masses in the northern European shelf seas from a Lagrangian perspective
-
-
-## Features
-
-- Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
-- Add yours!
-
+Analysis of the northern Eurpean shelf seas.
 
 ## Installation
 
 ```bash
-# pip install water-masses
-poetry add git+https://github.com/shelf-sea/water-masses.git#20.1a2
-```
-
-
-## Example
-
-Showcase how your project can be used:
-
-```python
-from water_masses.example import some_function
-
-print(some_function(3, 4))
-# => 7
+pip install water-masses
+# or
+poetry add git+https://github.com/shelf-sea/water-masses.git#master
 ```
 
 ## License
 
 [gpl3](https://github.com/shelf-sea/water-masses/blob/master/LICENSE)
 
-
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [5a686829afd7b6f54cb2170ed3072eee8e296ec0](https://github.com/wemake-services/wemake-python-package/tree/5a686829afd7b6f54cb2170ed3072eee8e296ec0). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/5a686829afd7b6f54cb2170ed3072eee8e296ec0...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [98c82c2c9f7f66fd8a5009361e4272240c25dc6f](https://github.com/wemake-services/wemake-python-package/tree/98c82c2c9f7f66fd8a5009361e4272240c25dc6f). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/98c82c2c9f7f66fd8a5009361e4272240c25dc6f...master) since then.
