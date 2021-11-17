@@ -5,6 +5,15 @@ Contents
 
 .. toctree::
   :maxdepth: 1
+  :caption: Water-Masses
+
+
+  pages/utilities.rst
+  pages/tracmass.rst
+
+
+.. toctree::
+  :maxdepth: 1
   :caption: Changelog
 
   pages/changelog.rst
