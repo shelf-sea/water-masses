@@ -11,7 +11,7 @@ Analysis of the northern Eurpean shelf seas.
 ```bash
 pip install water-masses
 # or
-poetry add git+https://github.com/shelf-sea/water-masses.git#master
+poetry add git+https://github.com/shelf-sea/water-masses.git#trunk
 ```
 
 ## License
