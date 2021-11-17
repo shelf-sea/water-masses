@@ -2,6 +2,11 @@
 
 We follow [Calendar Versions](https://calver.org/).
 
+## Version 2021.3
+
+- Add PC Analysis
+- Add time series tools
+
 ## Version 2021.2
 
 - Experimental designs

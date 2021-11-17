@@ -1,11 +1,23 @@
 # -*- coding: utf-8 -*-
-from . import tracmass, spgsi, processing, version, filter_month, origin, time_series
+from . import (
+    version,
+    # modules
+    constants,
+    spgsi,
+    processing,
+    filter_month,
+    time_series,
+    # submodules
+    tracmass,
+    origin,
+)
 from .tracmass import seeding
 from .origin import pca
 
 __all__ = [
     "version",
     # modules
+    "constants",
     "processing",
     "filter_month",
     "spgsi",
