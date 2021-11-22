@@ -1,6 +1,8 @@
-import xarray as xr
-from typing import Callable, List, Dict
+from typing import Callable, Dict, List
+
+import cf_xarray as cfxr  # noqa
 import numpy as np
+import xarray as xr
 from scipy import signal
 
 
@@ -20,14 +22,15 @@ def apply_filter(
         input_core_dims=[["time"], *[[] for _ in range(len(filter_args))]],
         output_core_dims=[["time"]],
         vectorize=True,
-    ).transpose("time", "lat", "lon")
+    ).cf.transpose("time", "latitude", "longitude")
 
     return data
 
 
 def butter_lowpass_filter(
-    data: np.ndarray, cutlen: int, fs: int, order=5
+    data: np.ndarray, cutlen: int = 15, fs: int = 12, order=5
 ) -> np.ndarray:
+    """1D lowpass butterworth filter."""
     return signal.sosfiltfilt(
         signal.butter(
             order, 1 / cutlen / (0.5 * fs), analog=False, btype="lowpass", output="sos"
