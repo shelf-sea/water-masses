@@ -6,6 +6,7 @@ We follow [Calendar Versions](https://calver.org/).
 
 - Add PC Analysis
 - Add time series tools
+- Add apply function for lowpass time-filter to field
 
 ## Version 2021.2
 

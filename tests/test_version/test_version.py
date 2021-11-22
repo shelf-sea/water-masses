@@ -5,4 +5,4 @@ from water_masses import version
 
 def test_version():
     """Double check version."""
-    assert version.pkg_version == "2021.3.0"
+    assert version.pkg_version == "2021.3.1"
