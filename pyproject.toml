@@ -9,7 +9,7 @@ style = "https://raw.githubusercontent.com/Eisbrenner/wemake-python-package/mast
 
 [tool.poetry]
 name = "water-masses"
-version = "2021.3.4"
+version = "2021.3.5"
 description = "Analysis of the northern European shelf seas"
 license = "GPL3"
 
