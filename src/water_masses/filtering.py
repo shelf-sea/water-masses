@@ -37,3 +37,22 @@ def butter_lowpass_filter(
         ),
         data,
     )
+
+
+def butter_bandstop_filter(
+    data: np.ndarray,
+    lowcut: float = 0.875,
+    highcut: float = 1.167,
+    fs: int = 12,
+    order: int = 5,
+):
+    """1D bandstop butterworth filter."""
+    nyq = 0.5 * fs
+    lcut = 1 / lowcut / nyq
+    hcut = 1 / highcut / nyq
+    return signal.sosfiltfilt(
+        signal.butter(
+            order, [hcut, lcut], analog=False, btype="bandstop", output="sos"
+        ),
+        data,
+    )
