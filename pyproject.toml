@@ -70,7 +70,7 @@ safety = "^1.10"
 # testing
 pytest = "^6.2"
 pytest-cov = "^3.0"
-pytest-randomly = "^3.8"
+pytest-randomly = "^3.10"
 pytest-sugar = "^0.9"
 
 # docs
