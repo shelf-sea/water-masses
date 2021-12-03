@@ -8,7 +8,7 @@ import vaex
 
 def open_tracmass_file(
     filepath: Path, use_vaex: bool = True
-) -> Union[vaex.dataframe, pd.DataFrame]:
+) -> Union[vaex.dataframe.DataFrameLocal, pd.DataFrame]:
     """Open tracmass as pandas dataframe or veax dataframe.
 
     Defaults to the use of vaex, otherwise uses pandas.
