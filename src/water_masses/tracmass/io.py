@@ -14,11 +14,7 @@ def open_tracmass_file(
     Defaults to the use of vaex, otherwise uses pandas.
 
     """
-    suffixes = "".join(filepath.suffixes[-2:]).lower()
-    if suffixes not in [".hdf5", ".csv", ".csv.gz"]:
-        raise ValueError(
-            "Unknown data format, known are CSV (including .csv.gz) and HDF5."
-        )
+    suffixes = _get_suffixes(filepath)
     kws = {
         "header": None,
         "names": ["id", "i", "j", "k", "subvol", "time"],
@@ -35,3 +31,17 @@ def open_tracmass_file(
         df = pd.read_csv(filepath, **kws)
 
     return df
+
+
+def _get_suffixes(path: Path) -> str:
+    """Extract and check suffixes."""
+    if "".join(path.suffixes[-1:]).lower() in [".hdf5", ".csv"]:
+        suffixes = "".join(path.suffixes[-1:]).lower()
+    elif "".join(path.suffixes[-2:]).lower() == ".csv.gz":
+        suffixes = "".join(path.suffixes[-2:]).lower()
+    else:
+        raise ValueError(
+            "Unknown data format, known are CSV (including .csv.gz) and HDF5."
+        )
+
+    return suffixes
