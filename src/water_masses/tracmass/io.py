@@ -7,7 +7,7 @@ import vaex
 
 
 def open_tracmass_file(
-    filepath: Path, use_vaex: bool = True
+    filepath: Path, use_vaex: bool = True, convert=False
 ) -> Union[vaex.dataframe.DataFrameLocal, pd.DataFrame]:
     """Open tracmass as pandas dataframe or veax dataframe.
 
@@ -20,6 +20,8 @@ def open_tracmass_file(
         "names": ["id", "i", "j", "k", "subvol", "time"],
         "usecols": [0, 1, 2, 3, 4, 5],
     }
+    if convert:
+        kws["convert"] = convert
     if use_vaex and (suffixes == ".hdf5"):
         df = vaex.open(filepath)
     elif use_vaex and (suffixes == ".csv"):
