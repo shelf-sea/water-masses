@@ -9,7 +9,7 @@ style = "https://raw.githubusercontent.com/Eisbrenner/wemake-python-package/mast
 
 [tool.poetry]
 name = "water-masses"
-version = "2022.1.1"
+version = "2022.1.2"
 description = "Analysis of the northern European shelf seas"
 license = "GPL3"
 
@@ -42,14 +42,14 @@ numpy = "^1.19"
 scipy = "^1.7"
 statsmodels = ">=0.12, <1.0"
 pandas = "^1.1"
-xarray = ">=0.16, <1.0"
+xarray = ">=2022"
 cf-xarray = ">=0.5, <1.0"
 eofs = "^1.4"
 #
 intake = ">=0.6, <1.0"
 intake-xarray = ">=0.4, <1.0"
 dask = ">=2021"
-h5netcdf = ">=0.10, <1.0"
+h5netcdf = ">=1"
 
 
 [tool.poetry.dev-dependencies]
