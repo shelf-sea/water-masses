@@ -61,7 +61,7 @@ isort = "5.10.0"
 flake8 = "3.9.2"
 
 # checks, formatting and linting
-wemake-python-styleguide = "^0.15"
+wemake-python-styleguide = "^0.17"
 flake8-pytest-style = "^1.5"
 flake8-isort = "^4.1"
 nitpick = "^0.28"
