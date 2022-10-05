@@ -66,7 +66,7 @@ flake8-pytest-style = "^1.5"
 flake8-isort = "^4.1"
 nitpick = "^0.28"
 
-safety = "^1.10"
+safety = "^2.2"
 
 # testing
 pytest = "^6.2"
