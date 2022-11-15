@@ -55,7 +55,7 @@ h5netcdf = ">=1"
 [tool.poetry.dev-dependencies]
 # pre-commit dependencies are hard coded in .pre-commit-config.yaml
 pre-commit = "^2.6.0"
-mypy = "0.910"
+mypy = "0.991"
 black = "21.10b0"
 isort = "5.10.0"
 flake8 = "3.9.2"
